@@ -16,26 +16,34 @@
 
 
 import uuid
+import random
 
-from datetime import datetime
 from locust import HttpLocust, TaskSet, task
 
 
 class MetricsTaskSet(TaskSet):
     _deviceid = None
+    _wordlist = []
 
     def on_start(self):
         self._deviceid = str(uuid.uuid4())
-
-    @task(1)
-    def login(self):
-        self.client.post(
-            '/login', {"deviceid": self._deviceid})
+        with open('/vocab.txt') as f:
+            self._wordlist = f.readlines()
+        
 
     @task(999)
-    def post_metrics(self):
-        self.client.post(
-            "/metrics", {"deviceid": self._deviceid, "timestamp": datetime.now()})
+    def suggest(self):
+        w = self._wordlist[random.randint(0, len(self._wordlist))]
+        q = w[:random.randint(2, len(w))]
+
+        self.client.get(
+            '/complete?q=%q' % q)
+
+    @task(999)
+    def search(self):
+        q = self._wordlist[random.randint(0, len(self._wordlist))]
+        self.client.get(
+            '/suggest?q=%q' % q)
 
 
 class MetricsLocust(HttpLocust):
