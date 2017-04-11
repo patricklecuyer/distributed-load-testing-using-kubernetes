@@ -29,7 +29,7 @@ class MetricsTaskSet(TaskSet):
         self._deviceid = str(uuid.uuid4())
         with open('/vocab.txt') as f:
             self._wordlist = f.readlines()
-        
+
 
     @task(999)
     def suggest(self):
@@ -37,13 +37,13 @@ class MetricsTaskSet(TaskSet):
         q = w[:random.randint(2, len(w))]
 
         self.client.get(
-            '/complete?q=%q' % q)
+            '/complete?q=%s' % q)
 
     @task(999)
     def search(self):
         q = self._wordlist[random.randint(0, len(self._wordlist))]
         self.client.get(
-            '/suggest?q=%q' % q)
+            '/suggest?q=%s' % q)
 
 
 class MetricsLocust(HttpLocust):
