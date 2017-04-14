@@ -31,19 +31,19 @@ class MetricsTaskSet(TaskSet):
             self._wordlist = f.readlines()
 
 
-    @task(999)
+    @task(8)
     def suggest(self):
         w = self._wordlist[random.randint(0, len(self._wordlist))]
         q = w[:random.randint(2, len(w))]
 
         self.client.get(
-            '/complete?q=%s' % q)
+            '/complete?q=%s' % q, name='complete')
 
-    @task(999)
+    @task(1)
     def search(self):
         q = self._wordlist[random.randint(0, len(self._wordlist))]
         self.client.get(
-            '/suggest?q=%s' % q)
+            '/suggest?q=%s' % q, name='suggest')
 
 
 class MetricsLocust(HttpLocust):

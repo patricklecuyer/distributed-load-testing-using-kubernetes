@@ -33,12 +33,12 @@ spec:
     spec:
       containers:
         - name: locust
-          image: gcr.io/compact-harbor-164002/locust-tasks:6
+          image: gcr.io/compact-harbor-164002/locust-tasks:7
           env:
             - name: LOCUST_MODE
               value: master
             - name: TARGET_HOST
-              value: https://macro-nuance-162921.appspot.com
+              value: https://wise-program-164315.appspot.com 
           ports:
             - name: loc-master-web
               containerPort: 8089
